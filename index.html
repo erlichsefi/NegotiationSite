@@ -1,0 +1,210 @@
+<!doctype html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+</head>
+<body>
+<div class="container">
+<div class="row">
+    <div class="col-6 text-center">
+        player 1
+    </div>
+
+    <div class="col-6 text-center">
+        player 2
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-6 text-center">
+        <ol id="player1-list"> 
+        </ol>
+    </div>
+
+    <div class="col-6 text-center">
+        <ol id="player2-list" >
+
+        </ol>
+    </div>
+
+    </div>
+
+
+    <div class="row">
+        <div class="col">
+        <h1 class="text-center" id="offer">NONE</h1>
+        </div>
+    </div>
+	<div  class="container">
+		<table class="table">
+  <thead>
+    <tr id="possible_offers">
+      
+    </tr>
+  </thead>
+  </table>
+
+	</div>
+	
+    <div id="buttons" class="row">
+        
+    </div>
+	
+	
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase.js"></script>
+<!-- Firebase App is always required and must be first -->
+<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-app.js"></script>
+
+<!-- Add additional services that you want to use -->
+<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-messaging.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-functions.js"></script>
+
+<!-- Comment out (or don't include) services that you don't want to use -->
+<!-- <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-storage.js"></script> -->
+
+
+<script>
+  // Initialize Firebase
+  // TODO: Replace with your project's customized code snippet
+  var config = {
+	apiKey: "AIzaSyAdARYSUjBcx8-z-y2ob33LdgVNcrCY5l8",
+    authDomain: "negotiation-c7724.firebaseapp.com",
+    databaseURL: "https://negotiation-c7724.firebaseio.com",
+    projectId: "negotiation-c7724",
+    storageBucket: "negotiation-c7724.appspot.com",
+    messagingSenderId: "757098458430"
+  };
+  firebase.initializeApp(config);
+</script>
+
+
+<script>
+    $( document ).ready(function() {
+		var database = firebase.database();
+		
+		function pushOffer(offer){
+		var newPostKey = firebase.database().ref().child('games'+game_id+'/offers/').push().key;
+
+		var updates = {};
+		updates['games'+game_id+'/offers/'+newPostKey] = offer;
+		firebase.database().ref().update(updates);
+		
+		
+		}
+		
+		
+        console.log( "ready!" );
+
+		var game_id='n1'
+		
+		var offers   = ['a','b','c'];
+        var p2_order = ['a','b','c'];
+		var p1_order = ['b','c','a'];
+		var offering_player='p1'
+		var youre_player='p1'
+		var offer_recived='a'
+        var offer = '';
+		
+		
+		var yourTurn=(offering_player==youre_player);
+
+        for(var i = 0; i<p2_order.length ; i++) {
+            $("#player2-list").append("<li class='player2-li' data-bind='"+ p2_order[i] +"'>" + p2_order[i] + "</li>");
+        }
+		
+		for(var i = 0; i<p1_order.length ; i++) {
+            $("#player1-list").append("<li class='player1-li' data-bind='"+ p1_order[i] +"'>" + p1_order[i] + "</li>");
+        }
+
+		for(var i = 0; i<offers.length ; i++) {
+			width=100/offers.length;
+            $("#possible_offers").append("<th style='width: "+width+"%' scope='col' class='col-sm'  data-bind='"+ offers[i] +"'>" + offers[i] + "</th>");
+        } 
+        
+		if (!yourTurn){
+			set_responding();
+		}
+		else{
+			set_offering();
+		}
+
+		
+		
+		
+		function set_offering(){
+		$("#buttons").append('<div  class="col text-center"> \
+            <button type="button" id="send" class="btn btn-success">SEND OFFER</button> \
+			</div>');
+			
+		var data=offers[0];
+		$( "#send" ).click(function(event) {
+			pushOffer(data)
+            alert( "You have offred "+data);
+        });
+		
+		$( ".col-sm" ).click(function(event) {
+            data = event.toElement.getAttribute('data-bind')
+            $("#offer").text("you have selected to offer : " + data);
+
+        });
+		
+		};
+		
+	
+		
+		
+		function set_responding(){
+		$("#buttons").append('<div  class="col text-center"> \
+            <button type="button" id="v" class="btn btn-success">V</button> \
+            <button type="button" id="x" class="btn btn-danger">X</button> \
+			</div>');
+		$("#offer").text("you been offered : " + offer_recived);
+		
+		
+		
+		$( "#v" ).click(function(event) {
+			pushOffer("accepted")
+            alert("You have accepted "+offer_recived);
+			});
+
+
+
+        $( "#x" ).click(function(event) {
+			pushOffer("rejectd")
+            alert( "You have rejectd "+offer_recived+" it's now your Turn");
+        });
+		
+		};
+		
+		
+		
+	
+		
+	
+    });
+
+
+</script>
+
+
+
+
+</body>
+</html>
