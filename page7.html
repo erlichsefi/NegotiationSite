@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="page7.css">
+<script src="https://cdn.firebase.com/js/client/2.2.3/firebase.js"></script>
+
+<title> Session1 </title>
+</head>
+<body>
+<p id="firstLine">
+<br>
+</p>
+
+<p id="secondLine">
+<br>
+</p>
+
+<p id="thirdLine">
+<br>
+</p>
+
+
+<table class="center" id='table'></table>
+
+<br><br><br>
+<p>
+?האם אתה מסכים להצעה
+<br>
+מסכים<input id="a1" type= "radio" name= "dis1" value="agree" checked>  <br>
+לא מסכים<input id="a2" type= "radio" name= "dis1" value= "disagree" checked>  <br><br>
+<button class="button button1" onclick="agreeButton()">המשך</button>
+</p>
+
+</body>
+
+
+  <script>
+	var vote;
+	var suggest=[];
+	var userVote=[];
+	var current,prefferd;
+	var startTime ;
+	window.onload=agentSuggest();
+	
+	function URLToArray() {
+		var url = window.location.href; 
+		var request = [];
+	        console.log(url);
+	      
+	        
+		var pairs = url.substring(url.indexOf('?') + 1).split('&');
+		for (var i = 0; i < pairs.length; i++) {
+			if(!pairs[i])
+				continue;
+			var pair = pairs[i].split('=');
+			request[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+		 }
+		 return request;
+	}
+	
+	function shuffle(array) {
+	  var currentIndex = 5;
+	  var temporaryValue, randomIndex;
+	  // While there remain elements to shuffle...
+	  while (0 !== currentIndex) {
+		// Pick a remaining element...
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex -= 1;
+		// And swap it with the current element.
+		temporaryValue = array[currentIndex];
+		array[currentIndex] = array[randomIndex];
+		array[randomIndex] = temporaryValue;
+	  }
+	  return array;
+	}
+	
+	function agentSuggest(){
+	        startTime = new Date();        //Start the clock!
+		userVote = URLToArray();
+		for(var i=0;i<7;i++){
+			suggest[i]="0";
+		}
+		do{
+			var cIndex = Math.floor(Math.random()*7);
+			current=userVote[cIndex];
+			var pIndex = Math.floor(Math.random()*7);
+			prefferd=userVote[pIndex];
+		}
+		while(cIndex == pIndex || cIndex < pIndex);
+		suggest[Math.floor(Math.random()*(pIndex+1))]=prefferd;
+		suggest[cIndex+Math.floor(Math.random()*(7-cIndex))]=current;
+		var permutationArray={};
+		var k=0;
+		for(var i=0;i<7;i++){
+			if(i!= cIndex && i!= pIndex){
+				permutationArray[k]=userVote[i];
+				k+=1;
+			}
+		}
+		var permutationArrayShufffle=shuffle(permutationArray);
+		k=0;
+		for(var i=0; i<7; i++){
+			if(suggest[i]=="0"){
+				suggest[i]=permutationArrayShufffle[k];
+				k+=1;
+			}
+		}
+		createTable(suggest , userVote);
+		document.getElementById("firstLine").innerHTML =  "על סמך סך ההצבעות כרגע נבחר היעד :"+ current;
+		document.getElementById("secondLine").innerHTML =   "המערכת מציעה לך ולעוד כמה אנשים לשנות את ההצבעה שלך כך שיבחר :" + prefferd;
+		document.getElementById("thirdLine").innerHTML =   ".שימו לב:  המערכת בנויה כך שהיא אינה פוגעת בהעדפות שלך";
+
+		var path = userVote[cIndex]+'.jpg';
+		document.body.style.backgroundImage = "url("+path+")";
+	}
+
+	function agreeButton(){
+            var endTime = new Date();        //Get the current time.
+            var timeSpent=(endTime - startTime)
+		if(document.getElementById("a1").checked==true){
+			vote = {
+				id:localStorage.getItem('id'),
+				userVote:userVote,
+                                email:localStorage.getItem('email'),
+				agentSuggest:suggest,
+				current:current,
+				prefferd:prefferd,
+				agreed:true,
+				session:1,
+				page6time:localStorage.getItem('page6time'),
+				page7time:timeSpent
+
+			};
+		}		
+		else {
+			vote = {
+				id:localStorage.getItem('id'),
+				userVote:userVote,
+                                email:localStorage.getItem('email'),
+				agentSuggest:suggest,
+				current:current,
+				prefferd:prefferd,
+				agreed:false,
+				session:1,
+				page6time:localStorage.getItem('page6time'),
+				page7time:timeSpent
+			};
+		}
+		var firebase = new Firebase('https://projectexpiriment-ed5e8.firebaseio.com');
+		firebase.push(vote,function(error){
+			if(error)
+				console.log('Error');
+			else
+				pageForward();
+		});
+		
+		
+	}
+
+
+
+	function pageForward(){
+		window.location.href = "page8.html";
+	}
+	
+	function createTable(suggest , userVote) {
+		var theTable = document.createElement('table');
+		tr = document.createElement('tr');
+		td = document.createElement('td');
+		td.appendChild(document.createTextNode('הצעת המכונה'));
+		td1 = document.createElement('td');
+		td1.appendChild(document.createTextNode('ההצבעה שלך'));
+		td2 = document.createElement('td');
+		td2.appendChild(document.createTextNode('#'));
+		tr.appendChild(td);
+		tr.appendChild(td1);
+		tr.appendChild(td2);
+		theTable.appendChild(tr);
+		// Note, don't forget the var keyword!
+		for (var i = 0, tr, td; i < 7; i++) {
+			tr = document.createElement('tr');
+		td = document.createElement('td');
+		td.appendChild(document.createTextNode(suggest[i]));
+		td1 = document.createElement('td');
+		td1.appendChild(document.createTextNode(userVote[i]));
+		td2 = document.createElement('td');
+		td2.appendChild(document.createTextNode(i));
+		tr.appendChild(td);
+		tr.appendChild(td1);
+		tr.appendChild(td2);
+			theTable.appendChild(tr);
+		}
+		document.getElementById('table').appendChild(theTable);
+	}
+	
+	
+	</script>
+</html>

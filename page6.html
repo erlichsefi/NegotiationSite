@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="page6.css">
+
+<title> Session1 </title>
+</head>
+<body>
+<h1> !המשחק מתחיל</h1>
+<p>
+.דרגו בבקשה את היעדים לפי ההעדפות שלכם
+</p>
+	<form id="form1" action="page7.html" onsubmit="return checkInput()" method="get"></form>
+
+</body>
+			
+  <script>
+      var startTime = new Date();        //Start the clock!
+    window.onbeforeunload = function()        //When the user leaves the page(closes the window/tab, clicks a link)...
+    {
+        var endTime = new Date();        //Get the current time.
+        var timeSpent=(endTime - startTime);
+          localStorage.setItem('page6time', timeSpent);
+
+    }
+
+	function getSelectedValues(){
+		var arr = {};
+		var e1  = document.getElementById("0");
+		arr[0] = e1.options[e1.selectedIndex].value;
+		var e2 =document.getElementById("1");
+		arr[1] = e2.options[e2.selectedIndex].value;
+		var e3 =document.getElementById("2");
+		arr[2] = e3.options[e3.selectedIndex].value;
+		var e4 =document.getElementById("3");
+		arr[3] = e4.options[e4.selectedIndex].value;
+		var e5 =document.getElementById("4");
+		arr[4] = e5.options[e5.selectedIndex].value;
+		var e6 =document.getElementById("5");
+		arr[5] = e6.options[e6.selectedIndex].value;
+		var e7 =document.getElementById("6");
+		arr[6] = e7.options[e7.selectedIndex].value;		
+		return arr;
+	}
+	function checkInput(){
+		var array = getSelectedValues();
+		for(var i = 0 ; i < 7 ; i++){
+			for(var j = i+1 ; j < 7 ; j++){
+				if(array[i] == array[j]){
+					alert("לא ניתן להצביע פעמיים עבור אותו יעד");
+					return false;
+				}
+			}
+		}
+	}
+	var form = document.getElementById("form1");
+	for(var i=0;i<7;i++){
+var itm = "<br><select id='"+i+"' name='"+i+"' required><option disabled selected value> -- בחר יעד -- </option><option value='אוסטרליה'>אוסטרליה</option><option value='איטליה'>איטליה</option><option value='אפריקה'> אפריקה</option><option value='הודו'> הודו</option><option value='הוואי'> הוואי</option><option value='וגאס'> וגאס</option><option value='שוויץ'> שוויץ</option></select><br/>";
+		form.innerHTML = form.innerHTML+itm;
+		
+	}
+	form.innerHTML = form.innerHTML+"<br><br><button class='button button1' >המשך</button>";
+  </script>
+</html>
