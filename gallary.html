@@ -11,10 +11,10 @@
     <title>Thumbnail Gallery - Start Bootstrap Template</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
     <!-- Custom styles for this template -->
-    <link href="css/thumbnail-gallery.css" rel="stylesheet">
+    <link href="thumbnail-gallery.css" rel="stylesheet">
 
   </head>
 
@@ -89,9 +89,22 @@
     
 
     <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
 
   </body>
 
 </html>
+<script>
+
+$( document ).ready(function(){
+	console.log("started")
+	$( "#send" ).click(function(event) {
+	  location.href = "./Test.html";
+    });
+})
+
+
+</script>
