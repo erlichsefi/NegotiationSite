@@ -195,6 +195,7 @@ apiKey: "your key",
 			}else{ 
 				//REJECTED PUSHED TO THE SERVER
 				if (action=='rejectd'){
+					alert(on_table+" was rejected")
 					// someone as rejected- switch the roles
 					switchRole();
 					
@@ -372,7 +373,7 @@ apiKey: "your key",
 			on_table=data;
 			pushOffer(data)
 			document.getElementById("send").disabled=true;
-            alert( "You have offred "+data);
+            //alert( "You have offred "+data);
 		}
 		else{
 			alert( "please select an outcome first");
@@ -398,7 +399,7 @@ apiKey: "your key",
 		// push reject action into firebase
         $( "#x" ).click(function(event) {
 			pushOffer("rejectd");		
-            alert( "You have rejectd "+on_table+" it's now your Turn");
+           // alert( "You have rejectd "+on_table+" it's now your Turn");
         });	
 	
 		if (offering_player==youre_player){
