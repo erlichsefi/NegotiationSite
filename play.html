@@ -4,7 +4,8 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="./Enter_files/starter-template.css" rel="stylesheet">
+    <link href="starter-template.css" rel="stylesheet">
+    <link rel="icon" href="https://v4-alpha.getbootstrap.com/favicon.ico">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -25,7 +26,12 @@
 	background-color: lightblue;
 	margin-top: 20px;
 	}
-</style>
+	.col-sm {
+		border: 1px solid;
+		padding: 10px;
+		box-shadow: 5px 10px #888888;
+	}
+	</style>
 	
 </head>
 <body>
@@ -35,7 +41,7 @@
         player 1
     </div>
 	<div class="col-4 text-center">
-        Your player is:
+        Your role is:
     </div>
     <div class="col-4 text-center">
         player 2
@@ -131,7 +137,9 @@ apiKey: "your key",
 <script>
         var game_id=window.location.search.split("?")[2].split("=")[1];
 		var user_name=window.location.search.split("?")[1].split("=")[1];
-		
+		var use_default=window.location.search.split("?")[3].split("=")[1];
+		var game_count=window.location.search.split("?")[4].split("=")[1];
+
 		var offers   = 'a,b,c,d';
         var p2_order = 'a>b>c>d';
 		var p1_order = 'b>c>a>d';
@@ -142,9 +150,9 @@ apiKey: "your key",
 	
 		
 		$( document ).ready(function(){
-		
+		debugger;
 		var database = firebase.database();
-		leadsRef =firebase.database().ref('/games'+game_id);
+		leadsRef =firebase.database().ref('Games_records/games'+game_id);
 		leadsRef.once('value',function(snapshot) {
 			
 			offers = snapshot.child("O").val().split(',');
@@ -167,7 +175,7 @@ apiKey: "your key",
 			$("#player_name").append(" <div> '"+youre_player+"'</div>");
 			build(database,game_id);
 			
-			if (offering_player!=youre_player){
+			if (offering_player!=youre_player & other_player_pc==1){
 				offerig=p2_order;
 				resoning=p1_order;
 				if (youre_player!='p1'){
@@ -180,7 +188,7 @@ apiKey: "your key",
 		});
 			
 			
-		leadsRef =firebase.database().ref('/games'+game_id).child("offers").orderByKey().limitToLast(1);
+		leadsRef =firebase.database().ref('Games_records/games'+game_id).child("offers").orderByKey().limitToLast(1);
 		leadsRef.on('value',function(snapshot) {
 			
 			snapshot.forEach(function(child) {
@@ -304,7 +312,7 @@ apiKey: "your key",
 			}
 		}
 		function OnGameEnd(result){
-			location.href = "./results.html?result="+result;
+			location.href = "./results.html?result="+result+"?use_default="+use_default+"?game_count="+game_count+"?game_id="+game_id+"?user_name="+user_name;
 			console.log("Game as ended with "+result);		
 		}
 		
@@ -337,10 +345,11 @@ apiKey: "your key",
 		}
 		
 		function pushOffer(offer){
-			var newPostKey = firebase.database().ref().child('games'+game_id+'/offers/').push().key;
+		debugger;
+			var newPostKey = firebase.database().ref().child('Games_records/games'+game_id+'/offers/').push().key;
 
 			var updates = {};
-			updates['games'+game_id+'/offers/'+newPostKey] = offer;
+			updates['Games_records/games'+game_id+'/offers/'+newPostKey] = offer;
 			firebase.database().ref().update(updates);
 		}
 

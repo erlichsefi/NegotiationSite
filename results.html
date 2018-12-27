@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
 
 <title>Result</title>
+<link rel="icon" href="https://v4-alpha.getbootstrap.com/favicon.ico">
 <meta http-equiv="content-type" content="text/html; charset=utf-8" >
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style type="text/css">
@@ -82,8 +83,8 @@ a {
   </div>
 </div>
 <div class="row">
-    <div class="col-md-6 col-md-push-3">
-      <p class="lead">You can play another game by clicking here:</p>
+    <div id="next_g" class="col-md-6 col-md-push-3">
+    
     </div>
   </div>
 <div id="resonse_div">
@@ -94,20 +95,89 @@ a {
     </div>
 	</div>
 <div class="row">
-    <div class="col-md-6 col-md-push-3">
-      <p class="lead">Otherwise, thank you for you're time.</p>
+    <div  id="otherwise" class="col-md-6 col-md-push-3">
     </div>
   </div>
 
 </body>
 </html>
+
+<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase.js"></script>
+<!-- Firebase App is always required and must be first -->
+<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-app.js"></script>
+
+<!-- Add additional services that you want to use -->
+<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-messaging.js"></script>
+
+
+<script>
+  // Initialize Firebase
+  // TODO: Replace with your project's customized code snippet
+  var config = {
+apiKey: "your key",
+    authDomain: "project.firebaseapp.com",
+    databaseURL: "projecDB",
+    projectId: "ID",
+    storageBucket: "storage",
+    messagingSenderId: "id"
+  };
+  firebase.initializeApp(config);
+</script>
+
+
 <script>
 
 $( document ).ready(function(){
+	var use_defult=window.location.search.split("?")[2].split("=")[1];
+	var game_count=parseInt(window.location.search.split("?")[3].split("=")[1]);
+	var game_id=window.location.search.split("?")[4].split("=")[1];
+	var user_name=window.location.search.split("?")[5].split("=")[1];
 	$("#outcome").append("<h1>"+window.location.search.split("?")[1].split("=")[1]+"</h1>");
+	var game_intotal;
+	
+	source =firebase.database().ref('default_games/num_default_games');
+	source.once('value',function(snapshot) {
+				game_intotal=snapshot.val();
+			});
+		});
+	if (use_defult=="yes"){
+		if (game_intotal>game_count){
+		source =firebase.database().ref('default_games/game_'+(game_count+1));
+		to =firebase.database().ref('Games_records/games' + game_id+"_"+(game_count+1));
+		
+		to.once('value',function(snapshot) {
+		source.once('value',function(snapshot) {
+					debugger;
+
+				to.set(snapshot.val());
+			});
+		});
+		
+		$("#next_g").append("<p class='lead'>This was youre #"+game_count+" game of "+game_intotal+"</p>");
+		$("#Otherwise").append(" <p class='lead'>.</p>");
+		}else{
+			$("#next_g").append("<p class='lead'>This was youre #"+game_count+" game of "+game_intotal+"</p>");
+			$("#Otherwise").append(" <p class='lead'>Thank you.</p>");
+			document.getElementById("next").disabled = false;
+
+		}
+	
+	}else{
+		$("#next_g").append("  <p class='lead'>You can play another game by clicking here:</p>");
+		$("#Otherwise").append(" <p class='lead'>Otherwise, thank you for you're time.</p>");
+	}
 	
 	$( "#next" ).click(function(event) {
-	  location.href = "./GameSelector.html";
+	if (use_defult=="yes"){
+		location.href = "./play.html?name="+user_name+"?id="+(game_id+"_"+(game_count+1))+"?use_default="+use_defult+"?game_count="+(game_count+1);
+	  }
+	  else{
+		location.href = "./GameSelector.html";
+
+	  }
     });
 })
 
