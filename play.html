@@ -139,7 +139,7 @@ apiKey: "your key",
 		var user_name=window.location.search.split("?")[1].split("=")[1];
 		var use_default=window.location.search.split("?")[3].split("=")[1];
 		var game_count=window.location.search.split("?")[4].split("=")[1];
-
+		
 		var offers   = 'a,b,c,d';
         var p2_order = 'a>b>c>d';
 		var p1_order = 'b>c>a>d';
@@ -150,11 +150,11 @@ apiKey: "your key",
 	
 		
 		$( document ).ready(function(){
-		debugger;
 		var database = firebase.database();
 		leadsRef =firebase.database().ref('Games_records/games'+game_id);
 		leadsRef.once('value',function(snapshot) {
-			
+					debugger;
+
 			offers = snapshot.child("O").val().split(',');
 			p2_order = snapshot.child("p2_order").val().split('>');
 			p1_order = snapshot.child("p1_order").val().split('>');

@@ -131,6 +131,7 @@ apiKey: "your key",
 <script>
 
 $( document ).ready(function(){
+	document.getElementById("next").disabled = true;
 	var use_defult=window.location.search.split("?")[2].split("=")[1];
 	var game_count=parseInt(window.location.search.split("?")[3].split("=")[1]);
 	var game_id=window.location.search.split("?")[4].split("=")[1];
@@ -140,46 +141,70 @@ $( document ).ready(function(){
 	
 	source =firebase.database().ref('default_games/num_default_games');
 	source.once('value',function(snapshot) {
-				game_intotal=snapshot.val();
-			});
-		});
+		game_intotal=snapshot.val();
+	}).then(() => {
+		
 	if (use_defult=="yes"){
+	debugger;
 		if (game_intotal>game_count){
-		source =firebase.database().ref('default_games/game_'+(game_count+1));
-		to =firebase.database().ref('Games_records/games' + game_id+"_"+(game_count+1));
+			source =firebase.database().ref('default_games/game_'+(game_count+1));
+			to =firebase.database().ref('Games_records/games' + game_id+"_"+(game_count+1));
 		
-		to.once('value',function(snapshot) {
-		source.once('value',function(snapshot) {
-					debugger;
+			to.once('value',function(snapshot) {
+				source.once('value',function(snapshot) {
+					to.set(snapshot.val()).then(() => {
+						var postfix;
+						if (game_count==1){
+							postfix='games' + game_id;
+						}
+						else{
+							postfix='games'+ game_id+"_"+(game_count);
+						}
+						source =firebase.database().ref('Games_records/' +postfix);
+						debugger;
 
-				to.set(snapshot.val());
-			});
-		});
 		
-		$("#next_g").append("<p class='lead'>This was youre #"+game_count+" game of "+game_intotal+"</p>");
-		$("#Otherwise").append(" <p class='lead'>.</p>");
-		}else{
+						source.once('value',function(snapshot_s) {
+						// assign the next game to both 
+							var p1_user=snapshot_s.child('p1_user').val();
+							var p2_user=snapshot_s.child('p2_user').val();
+							debugger;
+							firebase.database().ref('Games_records/games' + game_id+"_"+(game_count+1)+'/p1_user').set(p1_user);
+							firebase.database().ref('Games_records/games' + game_id+"_"+(game_count+1)+'/p2_user').set(p2_user).then(() => {
+								document.getElementById("next").disabled = false;
+							})
+
+						})
+						});
+		
+						$("#next_g").append("<p class='lead'>This was youre #"+game_count+" game of "+game_intotal+"</p>");
+						$("#otherwise").append(" <p class='lead'>click Here ^ to continue</p>");
+		
+				});
+			})
+		}
+		else{
 			$("#next_g").append("<p class='lead'>This was youre #"+game_count+" game of "+game_intotal+"</p>");
-			$("#Otherwise").append(" <p class='lead'>Thank you.</p>");
-			document.getElementById("next").disabled = false;
-
+			$("#otherwise").append(" <p class='lead'>Thank you.</p>");
 		}
 	
-	}else{
+	}
+	else{
 		$("#next_g").append("  <p class='lead'>You can play another game by clicking here:</p>");
-		$("#Otherwise").append(" <p class='lead'>Otherwise, thank you for you're time.</p>");
+		$("#otherwise").append(" <p class='lead'>Otherwise, thank you for you're time.</p>");
 	}
 	
 	$( "#next" ).click(function(event) {
-	if (use_defult=="yes"){
-		location.href = "./play.html?name="+user_name+"?id="+(game_id+"_"+(game_count+1))+"?use_default="+use_defult+"?game_count="+(game_count+1);
-	  }
-	  else{
-		location.href = "./GameSelector.html";
+		if (use_defult=="yes"){
+			location.href = "./play.html?name="+user_name+"?id="+(game_id+"_"+(game_count+1))+"?use_default="+use_defult+"?game_count="+(game_count+1);
+		}
+		else{
+			location.href = "./GameSelector.html";
 
-	  }
+		}
     });
-})
+	})
 
 
+});
 </script>
