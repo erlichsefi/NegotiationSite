@@ -8,7 +8,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-	
+
     <title>Join a game</title>
 	<style>
 	#offer_div {
@@ -37,22 +37,22 @@
 	</div>
 	<div id="resonse_div">
 	<div id="responding_buttons" class="row">
-      <div  class="col text-center"> 
-            <button type="button" id="p1_join" class="btn btn-success">Player as P1</button> 
-			<button type="button" id="p2_join" class="btn btn-success">Player as P2</button> 
+      <div  class="col text-center">
+            <button type="button" id="p1_join" class="btn btn-success">Player as P1</button>
+			<button type="button" id="p2_join" class="btn btn-success">Player as P2</button>
 
 		</div>
     </div>
 	</div>
-	
+
 	<div id="resonse_div">
 	<div id="responding_buttons" class="row">
-      <div  class="col text-center"> 
-            <button type="button" id="vsPc" class="btn btn-success">Player vs PC</button> 
+      <div  class="col text-center">
+            <button type="button" id="vsPc" class="btn btn-success">Player vs PC</button>
 		</div>
     </div>
 	</div>
-	
+
 </div>
 
 <!-- Optional JavaScript -->
@@ -109,98 +109,105 @@ apiKey: "your key",
 
 		return array.join(">");
 		}
-		
+
 		function randomStartingPos(){
 			return "p"+(Math.floor(Math.random() * 2 ) + 1);
 		}
-		
-		
-	
-		
-		
+
+
+
+
+
 		$( document ).ready(function(){
 			var PossibleOffers=""
 			var game_id="";
 			var p1_taken=false;
 			var p2_taken=false;
 			var use_default=false;
-			
+
 			var database = firebase.database();
 			leadsRef =firebase.database().ref('use_default');
 			leadsRef.once('value',function(snapshot) {
 				use_default = snapshot.val();
 			}).then(() => {
-			
-				if (use_default!="yes"){
-				var database = firebase.database();
-				leadsRef =firebase.database().ref('random_games_seeds/outcomes_source');
-				leadsRef.once('value',function(snapshot) {
-					PossibleOffers = snapshot.val().split(',');
-				});
 
 
-				leadsRef =database.ref('Games_indexs/PvsP/').orderByKey().limitToLast(1);
+          // defult use
+					var database = firebase.database();
+					leadsRef =firebase.database().ref('random_games_seeds/outcomes_source');
+					leadsRef.once('value',function(snapshot) {
+						PossibleOffers = snapshot.val().split(',');
+					});
+
+
+
+
+        // take the last id
+				leadsRef =firebase.database().ref('Games_indexs/PvsP').orderByKey().limitToLast(1);
 				leadsRef.on('value',function(snapshot) {
-					debugger;
 
 					snapshot.forEach(function(child) {
 						game_id =child.val();
-					});
-					
+					})
 
-					leadsRef =firebase.database().ref('Games_records');
-					leadsRef.once('value',function(snapshot) {
-					if (!snapshot.hasChild("games" + game_id)){
-							if (use_default=="yes"){
-								leadsRef_2 =firebase.database().ref('default_games/game_1');
-								leadsRef_2.once('value',function(snapshot) {
-									//debugger;
-									leadsRef.set(snapshot.val());
-								});
-							}else{
-							//push new game
-								leadsRef.set({
-								O: PossibleOffers.join(","),
-								p1_order : shuffle(PossibleOffers),
-								p2_order : shuffle(PossibleOffers),
-								p1_user : "waiting",
-								p2_user : "waiting",
-								starting : randomStartingPos(),
-								vspc : 0
-								});
-							}
-					}
-					else{
-						p1_taken=(snapshot.child("p1_user").val()!="waiting");
-						p2_taken=(snapshot.child("p2_user").val()!="waiting");
-						if (p1_taken && p2_taken){
-						
-						// push new index
-						game_id=game_id+1;
-						firebase.database().ref('Games_indexs/PvsP/'+game_id).set(game_id);
-						
-						document.getElementById("p1_join").disabled = false;
-						document.getElementById("p2_join").disabled = false;
-						}
-						else{
-							if (p1_taken){
-								document.getElementById("p1_join").disabled = true;
-							}
-							if (p2_taken){
-								document.getElementById("p2_join").disabled = true;
-							}
-						
+
+
+            // take the last game data
+  					leadsRef =firebase.database().ref('Games_records/games' + game_id);
+  					leadsRef.on('value',function(snapshot) {
+              // if the id is not in use
+  					if (!snapshot.hasChild("p1_user")){
+                 //if default - >
+  							if (use_default=="yes"){
+  								leadsRef_2 =firebase.database().ref('default_games/game_1');
+  								leadsRef_2.once('value',function(snapshot) {
+  									//debugger;
+  									leadsRef.set(snapshot.val());
+  								});
+  							}else{
+  							//push new game
+  								leadsRefset({
+  								O: PossibleOffers.join(","),
+  								p1_order : shuffle(PossibleOffers),
+  								p2_order : shuffle(PossibleOffers),
+  								p1_user : "waiting",
+  								p2_user : "waiting",
+  								starting : randomStartingPos(),
+  								vspc : 0
+  								});
+  							}
+  					}
+  					else{
+  						p1_taken=(snapshot.child("p1_user").val()!="waiting");
+  						p2_taken=(snapshot.child("p2_user").val()!="waiting");
+  						if (p1_taken && p2_taken){
+
+  						// push new index
+  						game_id=game_id+1;
+  						firebase.database().ref('Games_indexs/PvsP/'+game_id).set(game_id);
+
+  						document.getElementById("p1_join").disabled = false;
+  						document.getElementById("p2_join").disabled = false;
+  						}
+  						else{
+  							if (p1_taken){
+  								document.getElementById("p1_join").disabled = true;
+  							}
+  							if (p2_taken){
+  								document.getElementById("p2_join").disabled = true;
+  							}
+
 						}
 					}});
-				
-				
-				});
+
+        })
+
 		})
-		
-	
+
+
 		$( "#vsPc" ).click(function(event) {
 			name=document.getElementById("usr").value;
-			
+
 			if (name!=""){
 			//send to vs pc
 			leadsRef=firebase.database().ref('Games_indexs/vs_pc/').orderByKey().limitToLast(1);
@@ -226,32 +233,34 @@ apiKey: "your key",
 				alert("You forgot to enter your email")
 			}
         });
-		
-		
+
+
 		$( "#p1_join" ).click(function(event) {
 			//send to p1
 			name=document.getElementById("usr").value;
 			if (name!=""){
-				firebase.database().ref('Games_records/games' + game_id+"/p1_user").set(name);
-				location.href = "./play.html?name="+name+"?id="+game_id+"?use_default="+use_default+"?game_count=1";
+          copy_game_id=game_id;
+				   firebase.database().ref('Games_records/games' + copy_game_id+"/p1_user").set(name);
+				   location.href = "./play.html?name="+name+"?id="+copy_game_id+"?use_default="+use_default+"?game_count=1";
 			}else{
-			alert("You forgot to enter your email")
+			     alert("You forgot to enter your email")
 			}
         });
-		
+
 		$( "#p2_join" ).click(function(event) {
 			//send to p2
-			
+
 			name=document.getElementById("usr").value;
 			if (name!=""){
-				firebase.database().ref('Games_records/games' + game_id+"/p2_user").set(name)
-				location.href = "./play.html?name="+name+"?id="+game_id+"?use_default="+use_default+"?game_count=1";
+        copy_game_id=game_id;
+				firebase.database().ref('Games_records/games' + copy_game_id+"/p2_user").set(name)
+				location.href = "./play.html?name="+name+"?id="+copy_game_id+"?use_default="+use_default+"?game_count=1";
 			}
 			else{
 				alert("You forgot to enter your email")
 			}
         });
-		
+
 
 
 	})
