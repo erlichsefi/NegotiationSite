@@ -147,44 +147,61 @@ $( document ).ready(function(){
 	if (use_defult=="yes"){
 	debugger;
 		if (game_intotal>game_count){
-			source =firebase.database().ref('default_games/game_'+(game_count+1));
-			to =firebase.database().ref('Games_records/games' + game_id+"_"+(game_count+1));
+		
+		var copy_from;
+		var copy_to;
+		var current;
+		var next_id;
+		if (game_count==1){
+				copy_from='default_games/game_'+(game_count+1);
+				next_id= game_id+"_"+(game_count+1);
+				copy_to='Games_records/games' + game_id+"_"+(game_count+1);
+				current='Games_records/games' + game_id;
+		}
+		else{
+				copy_from='default_games/game_'+(game_count+1);
+				next_id=game_id.split("_")[0]+"_"+(game_count+1);
+				copy_to='Games_records/games' + game_id.split("_")[0]+"_"+(game_count+1);
+				current='Games_records/games' + game_id;
+		}
+						
+		
+		
+		debugger;
+		console.log(copy_from)
+		console.log(copy_to)
+			source =firebase.database().ref(copy_from);
+			to =firebase.database().ref(copy_to);
 		
 			to.once('value',function(snapshot) {
 				source.once('value',function(snapshot) {
 					to.set(snapshot.val()).then(() => {
-						var postfix;
-						if (game_count==1){
-							postfix='games' + game_id;
-						}
-						else{
-							postfix='games'+ game_id+"_"+(game_count);
-						}
-						source =firebase.database().ref('Games_records/' +postfix);
-						debugger;
-
-		
-						source.once('value',function(snapshot_s) {
+						console.log(current)
+						source_2 =firebase.database().ref(current);
+						source_2.once('value',function(snapshot_s) {
 						// assign the next game to both 
 							var p1_user=snapshot_s.child('p1_user').val();
 							var p2_user=snapshot_s.child('p2_user').val();
+							var vspc=snapshot_s.child('vspc').val();
 							debugger;
-							firebase.database().ref('Games_records/games' + game_id+"_"+(game_count+1)+'/p1_user').set(p1_user);
-							firebase.database().ref('Games_records/games' + game_id+"_"+(game_count+1)+'/p2_user').set(p2_user).then(() => {
-								document.getElementById("next").disabled = false;
+							firebase.database().ref(copy_to+'/p1_user').set(p1_user).then(()=>{
+							firebase.database().ref(copy_to+'/p2_user').set(p2_user).then(() => {
+							firebase.database().ref(copy_to+'/vspc').set(vspc).then(() => {
+							document.getElementById("next").disabled = false;
 							})
-
+							})
+							})
 						})
 						});
 		
-						$("#next_g").append("<p class='lead'>This was youre #"+game_count+" game of "+game_intotal+"</p>");
+						$("#next_g").append("<p class='lead'>This was youre #"+game_count+" out game of "+game_intotal+"</p>");
 						$("#otherwise").append(" <p class='lead'>click Here ^ to continue</p>");
 		
 				});
 			})
 		}
 		else{
-			$("#next_g").append("<p class='lead'>This was youre #"+game_count+" game of "+game_intotal+"</p>");
+			$("#next_g").append("<p class='lead'>This was youre #"+game_count+" out game of "+game_intotal+"</p>");
 			$("#otherwise").append(" <p class='lead'>Thank you.</p>");
 		}
 	
@@ -196,7 +213,7 @@ $( document ).ready(function(){
 	
 	$( "#next" ).click(function(event) {
 		if (use_defult=="yes"){
-			location.href = "./play.html?name="+user_name+"?id="+(game_id+"_"+(game_count+1))+"?use_default="+use_defult+"?game_count="+(game_count+1);
+			location.href = "./play.html?name="+user_name+"?id="+next_id+"?use_default="+use_defult+"?game_count="+(game_count+1);
 		}
 		else{
 			location.href = "./GameSelector.html";

@@ -85,6 +85,7 @@ apiKey: "your key",
     projectId: "ID",
     storageBucket: "storage",
     messagingSenderId: "id"
+
   };
   firebase.initializeApp(config);
 </script>
@@ -209,6 +210,7 @@ apiKey: "your key",
 			name=document.getElementById("usr").value;
 
 			if (name!=""){
+			var game_ready;
 			//send to vs pc
 			leadsRef=firebase.database().ref('Games_indexs/vs_pc/').orderByKey().limitToLast(1);
 			leadsRef.once('value',function(snapshot) {
@@ -217,7 +219,22 @@ apiKey: "your key",
 				});
 			}).then(()=>{
 			game_vs_pc_id=game_vs_pc_id.substring(0,game_vs_pc_id.length-1)+(parseInt(game_vs_pc_id.substring(game_vs_pc_id.length-1))+1);
-			firebase.database().ref('Games_records/games' + game_vs_pc_id).set({
+			ref=firebase.database().ref('Games_records/games' + game_vs_pc_id)
+			if (use_default=="yes"){
+  				leadsRef_2 =firebase.database().ref('default_games/game_1');
+  				leadsRef_2.once('value',function(snapshot) {
+  				//debugger;
+  				ref.set(snapshot.val()).then(()=>{
+				firebase.database().ref('Games_records/games' + game_vs_pc_id+"/p1_user").set(name);
+				firebase.database().ref('Games_records/games' + game_vs_pc_id+"/p2_user").set("pc");
+				firebase.database().ref('Games_records/games' + game_vs_pc_id+"/vspc").set(1);
+				firebase.database().ref('Games_indexs/vs_pc/'+game_vs_pc_id).set(game_vs_pc_id);
+				location.href = "./play.html?name="+name+"?id="+game_vs_pc_id+"?use_default="+use_default+"?game_count=1";
+			});
+				})
+  			}
+			else{
+				ref.set({
 					O: PossibleOffers.join(","),
 					p1_order : shuffle(PossibleOffers),
 					p2_order : shuffle(PossibleOffers),
@@ -225,9 +242,14 @@ apiKey: "your key",
 					p2_user : "pc",
 					starting : randomStartingPos(),
 					vspc : 1
-				});
-			firebase.database().ref('Games_indexs/vs_pc/'+game_vs_pc_id).set(game_vs_pc_id);
-			location.href = "./play.html?name="+name+"?id="+game_vs_pc_id+"?use_default="+use_default+"?game_count=1";
+				}).then(()=>{
+				firebase.database().ref('Games_records/games' + game_vs_pc_id+"/p1_user").set(name);
+				firebase.database().ref('Games_records/games' + game_vs_pc_id+"/p2_user").set("pc");
+				firebase.database().ref('Games_indexs/vs_pc/'+game_vs_pc_id).set(game_vs_pc_id);
+				location.href = "./play.html?name="+name+"?id="+game_vs_pc_id+"?use_default="+use_default+"?game_count=1";
+			})
+			}
+			
 			})
 			}else{
 				alert("You forgot to enter your email")

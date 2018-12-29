@@ -34,7 +34,7 @@
 	"O" : "New_York,Los_Angeles,Rome,London,Paris,Buenos_Aires,Tokyo",
     "p1_order" : "Buenos_Aires>New_York>London>Los_Angeles>Tokyo>Rome>Paris",
     "p1_user" : "waiting",
-    "p2_order" : "London>Buenos_Aires>Los_Angeles>>New_York>Paris>Tokyo>Rome",
+    "p2_order" : "London>Buenos_Aires>Los_Angeles>New_York>Paris>Tokyo>Rome",
     "p2_user" : "waiting",
     "starting" : "p2",
     "vspc" : 0
