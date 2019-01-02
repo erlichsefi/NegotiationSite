@@ -1,0 +1,115 @@
+{
+  "Games_indexs" : {
+    "PvsP" : [ null, 1 ],
+    "vs_pc" : {
+      "pc_1" : "pc_1"
+    }
+  },
+  "default_games" : {
+    "game_1" : {
+      "O" : "New_York,Los_Angeles,Rome,London,Paris,Buenos_Aires,Tokyo",
+      "Type" : "opposite_order",
+      "p1_order" : "New_York>Los_Angeles>Rome>London>Paris>Buenos_Aires>Tokyo",
+      "p1_user" : "waiting",
+      "p2_order" : "Tokyo>Buenos_Aires>Paris>London>Rome>Los_Angeles>New_York",
+      "p2_user" : "waiting",
+      "starting" : "p1",
+      "vspc" : 0
+    },
+    "game_10" : {
+      "O" : "New_York,Los_Angeles,Rome,London,Paris,Buenos_Aires,Tokyo",
+      "Type" : "Intersection_2-V",
+      "p1_order" : "Paris>London>Buenos_Aires>Los_Angeles>New_York>Rome>Tokyo",
+      "p1_user" : "waiting",
+      "p2_order" : "Tokyo>London>New_York>Buenos_Aires>Paris>Rome>Los_Angeles",
+      "p2_user" : "waiting",
+      "starting" : "p2",
+      "vspc" : 0
+    },
+    "game_2" : {
+      "O" : "New_York,Los_Angeles,Rome,London,Paris,Buenos_Aires,Tokyo",
+      "Type" : "Same_order",
+      "p1_order" : "New_York>Los_Angeles>Rome>London>Paris>Buenos_Aires>Tokyo",
+      "p1_user" : "waiting",
+      "p2_order" : "New_York>Los_Angeles>Rome>London>Paris>Buenos_Aires>Tokyo",
+      "p2_user" : "waiting",
+      "starting" : "p2",
+      "vspc" : 0
+    },
+    "game_3" : {
+      "O" : "New_York,Los_Angeles,Rome,London,Paris,Buenos_Aires,Tokyo",
+      "Type" : "Full_Intersection_otherOpposite-V",
+      "p1_order" : "Paris>Los_Angeles>London>Tokyo>New_York>Buenos_Aires>Rome",
+      "p1_user" : "waiting",
+      "p2_order" : "Tokyo>London>Paris>Los_Angeles>Buenos_Aires>Rome>New_York",
+      "p2_user" : "waiting",
+      "starting" : "p1",
+      "vspc" : 0
+    },
+    "game_4" : {
+      "O" : "New_York,Los_Angeles,Rome,London,Paris,Buenos_Aires,Tokyo",
+      "Type" : "Full_Intersection_otherOpposite-V",
+      "p1_order" : "Buenos_Aires>New_York>London>Los_Angeles>Tokyo>Rome>Paris",
+      "p1_user" : "waiting",
+      "p2_order" : "London>Buenos_Aires>Los_Angeles>New_York>Paris>Tokyo>Rome",
+      "p2_user" : "waiting",
+      "starting" : "p2",
+      "vspc" : 0
+    },
+    "game_5" : {
+      "O" : "New_York,Los_Angeles,Rome,London,Paris,Buenos_Aires,Tokyo",
+      "Type" : "Intersection_0-V",
+      "p1_order" : "New_York>Paris>Tokyo>Buenos_Aires>Rome>London>Los_Angeles",
+      "p1_user" : "waiting",
+      "p2_order" : "Paris>Rome>Los_Angeles>London>Tokyo>New_York>Buenos_Aires",
+      "p2_user" : "waiting",
+      "starting" : "p2",
+      "vspc" : 0
+    },
+    "game_6" : {
+      "O" : "New_York,Los_Angeles,Rome,London,Paris,Buenos_Aires,Tokyo",
+      "Type" : "Intersection_0-V",
+      "p1_order" : "New_York>Los_Angeles>Rome>London>Paris>Buenos_Aires>Tokyo",
+      "p1_user" : "waiting",
+      "p2_order" : "Tokyo>Buenos_Aires>Paris>London>Rome>Los_Angeles>New_York",
+      "p2_user" : "waiting",
+      "starting" : "p1",
+      "vspc" : 0
+    },
+    "game_7" : {
+      "O" : "New_York,Los_Angeles,Rome,London,Paris,Buenos_Aires,Tokyo",
+      "Type" : "Intersection_1-V",
+      "p1_order" : "Tokyo>Buenos_Aires>Rome>New_York>London>Paris>Los_Angeles",
+      "p1_user" : "waiting",
+      "p2_order" : "Paris>Tokyo>New_York>Los_Angeles>Buenos_Aires>London>Rome",
+      "p2_user" : "waiting",
+      "starting" : "p2",
+      "vspc" : 0
+    },
+    "game_8" : {
+      "O" : "New_York,Los_Angeles,Rome,London,Paris,Buenos_Aires,Tokyo",
+      "Type" : "Intersection_1-V",
+      "p1_order" : "New_York>London>Los_Angeles>Paris>Tokyo>Rome>Buenos_Aires",
+      "p1_user" : "waiting",
+      "p2_order" : "Los_Angeles>Tokyo>New_York>Rome>London>Paris>Buenos_Aires",
+      "p2_user" : "waiting",
+      "starting" : "p1",
+      "vspc" : 0
+    },
+    "game_9" : {
+      "O" : "New_York,Los_Angeles,Rome,London,Paris,Buenos_Aires,Tokyo",
+      "Type" : "Intersection_2-V",
+      "p1_order" : "Rome>Tokyo>Paris>London>Los_Angeles>Buenos_Aires>New_York",
+      "p1_user" : "waiting",
+      "p2_order" : "Tokyo>Rome>London>New_York>Los_Angeles>Buenos_Aires>Paris",
+      "p2_user" : "waiting",
+      "starting" : "p1",
+      "vspc" : 0
+    },
+    "num_default_games" : 4
+  },
+  "random_games_seeds" : {
+    "outcomes_source" : "New_York,Los_Angeles,Rome,London,Paris,Buenos_Aires,Tokyo"
+  },
+  "use_default" : "yes"
+}
