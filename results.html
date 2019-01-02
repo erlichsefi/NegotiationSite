@@ -90,7 +90,7 @@ a {
 <div id="resonse_div">
 	<div id="responding_buttons" class="row">
       <div  class="col text-center"> 
-            <button type="button" id="next" class="btn btn-success">Play Another Game</button> 
+            <button type="button" id="next" class="btn btn-success">Play the next game</button> 
 		</div>
     </div>
 	</div>
@@ -194,14 +194,14 @@ $( document ).ready(function(){
 						})
 						});
 		
-						$("#next_g").append("<p class='lead'>This was youre #"+game_count+" out game of "+game_intotal+"</p>");
+						$("#next_g").append("<p class='lead'>This was your #"+game_count+" game, out of "+game_intotal+" games</p>");
 						$("#otherwise").append(" <p class='lead'>click Here ^ to continue</p>");
 		
 				});
 			})
 		}
 		else{
-			$("#next_g").append("<p class='lead'>This was youre #"+game_count+" out game of "+game_intotal+"</p>");
+			$("#next_g").append("<p class='lead'>This was your #"+game_count+"game, out of "+game_intotal+" games</p>");
 			$("#otherwise").append(" <p class='lead'>Thank you.</p>");
 		}
 	

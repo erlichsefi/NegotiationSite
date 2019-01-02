@@ -30,6 +30,7 @@
 		border: 1px solid;
 		padding: 10px;
 		box-shadow: 5px 10px #888888;
+		
 	}
 	</style>
 	
@@ -38,13 +39,13 @@
 <div class="container">
 <div class="row">
     <div class="col-4 text-center">
-        player 1
+        p1:
     </div>
 	<div class="col-4 text-center">
         Your role is:
     </div>
     <div class="col-4 text-center">
-        player 2
+        p2:
     </div>
 
 </div>
@@ -147,10 +148,12 @@ apiKey: "your key",
 		var youre_player='p1'
 		var other_player='p2'
 		var on_table='';
+		var last="";
+		var action="waiting";
 	
 		document.getElementById("x").disabled = true;
 		document.getElementById("v").disabled = true;
-		
+		disable_selection=false;
 		$( document ).ready(function(){
 		var database = firebase.database();
 		leadsRef =firebase.database().ref('Games_records/games'+game_id);
@@ -194,10 +197,12 @@ apiKey: "your key",
 		leadsRef.on('value',function(snapshot) {
 			
 			snapshot.forEach(function(child) {
-				action =child.val();
+				debugger;
+				action =child.child("offer").val();
 				console.log(action);
 			});
-			
+			if (action!=last){
+			last=action
 			
 			//ACCEPTED ACTION PUSHED TO THE SERVER
 			if (action=='accepted'){
@@ -234,7 +239,7 @@ apiKey: "your key",
 					
 				    // an offer made, if i'm not offering present the outcome
 					if (offering_player!=youre_player){
-						$("#offer").text("you been offered : " + action);
+						$("#offer").text("You have been offered : " + action);
 						on_table=action;
 						//TODO: enable buttons
 						if (offers.length>1){
@@ -281,7 +286,7 @@ apiKey: "your key",
 				
 			}
 			}
-		
+		}
 		});
 		
 			function intersection(s_order,s2){
@@ -323,7 +328,7 @@ apiKey: "your key",
 				offering_player=other_player;
 				document.getElementById("offer_div").style.display = "none";
 				document.getElementById("resonse_div").style.display = "block";
-				$("#offer").text("Waiting to offer from other party");
+				$("#offer").text("Waiting for an offer from the other party");
 				
 				//TODO: disable buttons
 				document.getElementById("x").disabled = true;
@@ -336,11 +341,15 @@ apiKey: "your key",
 				document.getElementById("offer_div").style.display = "block";
 				$("#offer").text("Please select an outcome to offer");
 				//document.getElementById("send").disabled=false;
+				disable_selection=false;
 			}
 			
 			if (on_table!=''){
 				document.getElementById(on_table).style.display = "none";
 				offers.splice(offers.indexOf(on_table), 1);
+				
+				document.getElementById(on_table+"_1").innerHTML=on_table.fontcolor("red");
+				document.getElementById(on_table+"_2").innerHTML=on_table.fontcolor("red");
 			}
 
 		
@@ -351,7 +360,7 @@ apiKey: "your key",
 			var newPostKey = firebase.database().ref().child('Games_records/games'+game_id+'/offers/').push().key;
 
 			var updates = {};
-			updates['Games_records/games'+game_id+'/offers/'+newPostKey] = offer;
+			updates['Games_records/games'+game_id+'/offers/'+newPostKey] = {"offer":offer,"time":new Date()};
 			firebase.database().ref().update(updates);
 		}
 
@@ -361,18 +370,18 @@ apiKey: "your key",
 	
 		// set p2 order
         for(var i = 0; i<p2_order.length ; i++) {
-            $("#player2-list").append("<li class='player2-li'  data-bind='"+ p2_order[i] +"'>" + p2_order[i] + "</li>");
+            $("#player2-list").append("<li id='"+p2_order[i]+"_2' class='player2-li'  data-bind='"+ p2_order[i] +"'>" + p2_order[i] + "</li>");
         }
 		
 		// set p1 order
 		for(var i = 0; i<p1_order.length ; i++) {
-            $("#player1-list").append("<li class='player1-li'  data-bind='"+ p1_order[i] +"'>" + p1_order[i] + "</li>");
+            $("#player1-list").append("<li id='"+p1_order[i]+"_1' class='player1-li'  data-bind='"+ p1_order[i] +"'>" + p1_order[i] + "</li>");
         }
 
 		// set all possible outcomes 
 		for(var i = 0; i<offers.length ; i++) {
 			width=100/offers.length;
-            $("#possible_offers").append("<th id='"+offers[i] +"' style='width: "+width+"%' scope='col' class='col-sm'  data-bind='"+ offers[i] +"'>" + offers[i] + "</th>");
+            $("#possible_offers").append("<th  id='"+offers[i] +"' style='width: "+width+"%' scope='col' class='col-sm'  data-bind='"+ offers[i] +"'>" + offers[i] + "</th>");
         } 
         
 	
@@ -384,6 +393,7 @@ apiKey: "your key",
 			on_table=data;
 			pushOffer(data)
 			document.getElementById("send").disabled=true;
+			disable_selection=true;
             //alert( "You have offred "+data);
 		}
 		else{
@@ -393,9 +403,11 @@ apiKey: "your key",
 		
 		// on click on table show
 		$( ".col-sm" ).click(function(event) {
+			if (!disable_selection){
             data = event.toElement.getAttribute('data-bind')
-            $("#offer").text("you have selected to offer : " + data);
+            $("#offer").text("You have selected to offer : " + data);
 			document.getElementById("send").disabled=false;
+			}
         });
 		
 
@@ -426,7 +438,7 @@ apiKey: "your key",
 			else{
 				document.getElementById("resonse_div").style.display = "block";
 				document.getElementById("offer_div").style.display = "none";
-				$("#offer").text("Waiting to offer from other party");
+				$("#offer").text("Waiting for an offer from the other party");
 				//document.getElementById("send").disabled=false;
 			}
 	};
