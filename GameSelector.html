@@ -79,14 +79,12 @@
   // Initialize Firebase
   // TODO: Replace with your project's customized code snippet
   var config = {
-
-	
-apiKey: "AIzaSyAdARYSUjBcx8-z-y2ob33LdgVNcrCY5l8",
-    authDomain: "negotiation-c7724.firebaseapp.com",
-    databaseURL: "https://negotiation-c7724.firebaseio.com",
-    projectId: "negotiation-c7724",
-    storageBucket: "negotiation-c7724.appspot.com",
-    messagingSenderId: "757098458430"
+apiKey: "your key",
+    authDomain: "project.firebaseapp.com",
+    databaseURL: "projecDB",
+    projectId: "ID",
+    storageBucket: "storage",
+    messagingSenderId: "id"
 
   };
   firebase.initializeApp(config);
@@ -122,6 +120,8 @@ apiKey: "AIzaSyAdARYSUjBcx8-z-y2ob33LdgVNcrCY5l8",
 
 
 		$( document ).ready(function(){
+			document.getElementById("vsPc").disabled = true;
+
 			var PossibleOffers=""
 			var game_id="";
 			var p1_taken=false;

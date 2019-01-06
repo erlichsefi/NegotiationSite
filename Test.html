@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en" class="gr__v4-alpha_getbootstrap_com">
 
@@ -29,11 +30,12 @@
     <div class="container">
 
       <div class="starter-template">
-        <h1>Question #1.</h1>
-        <p class="lead">The negotiation started with available outcomes {Rome,London,Paris,Tokyo}.<br>
-						p1 offered "London" and p2 rejected.<br>
-						then p2 offered "Tokyo" and p1 rejected.<br>
-						What can p1 offer next?.</p>
+        <h1>Let's see that you have got everything correct.</h1>
+		<h1>Question #1.</h1>
+        <p class="lead">The negotiation started with the following possible destinations: Rome, London, Paris, and Tokyo.<br>
+						In the first round p1 offered "London" to p2, and p2 rejected.<br>
+						In the second round p2 offered "Tokyo" to p1, and p1 rejected.<br>
+						In the third round, what offers can p1 make to p2?</p>
 	  <div class="form-check form-check-inline">
 
       </div>
@@ -49,13 +51,13 @@
         <div class="form-check">
           <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
           <label class="form-check-label" for="gridRadios2">
-            one of the following: {Rome,London,Paris}
+            One of the following: Rome ,London, Paris
           </label>
         </div>
         <div class="form-check">
           <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3">
           <label class="form-check-label" for="gridRadios3">
-                one of the following: {Rome,Paris}
+                One of the following: Rome, Paris
           </label>
         </div>
       </div>
@@ -68,12 +70,12 @@
 
       <div class="starter-template">
         <h1>Question #2.</h1>
-        <p class="lead">The negotiation started with available outcomes {Rome,London,Paris}.<br>
-						p1 offered "Rome" and p2 rejected.<br>
-						then p2 offered "London" and p1 rejected.<br>
-						then p1 offered "Paris".<br>
-						What can p2 do?.</p>
-	  <div class="form1-check form1-check-inline">
+        <p class="lead">The negotiation started with the following possible destinations: Rome, London, and Paris.<br>
+						In the first round p1 offered "Rome" to p2, and p2 rejected.<br>
+						In the second round p2 offered "London" to p1, and p1 rejected.<br>
+						In the third round, p1 offered "Paris" to p2.<br>
+						What actions are available for p2 as a response?</p>
+		<div class="form1-check form1-check-inline">
 
       </div>
 	   <fieldset class="form1-group">
@@ -82,19 +84,19 @@
         <div class="form1-check">
           <input class="form1-check-input" type="radio" name="gridRadios1" id="gridRadios1" value="option1" checked>
           <label class="form1-check-label" for="gridRadios1">
-                                            Only Reject                           
+                                            Only "Reject"                           
           </label>
         </div>
         <div class="form1-check">
           <input class="form1-check-input" type="radio" name="gridRadios1" id="gridRadios2" value="option2">
           <label class="form1-check-label" for="gridRadios2">
-            Only Accept
+            Only "Accept"
           </label>
         </div>
         <div class="form1-check">
           <input class="form1-check-input" type="radio" name="gridRadios1" id="gridRadios3" value="option3">
           <label class="form1-check-label" for="gridRadios3">
-               Accept or Reject
+               "Accept" or "Reject"
           </label>
         </div>
       </div>
@@ -108,7 +110,7 @@
         <h1>Question #3.</h1>
 		            
         <p class="lead">
-						Select the correct answer about the  following photo.</p>
+						Select the correct answer regarding the following scenario:</p>
 	<img class="img-fluid img-thumbnail" src="./images/example.png" alt="">
 	  <div class="form1-check form1-check-inline">
 
@@ -119,19 +121,19 @@
         <div class="form1-check">
           <input class="form1-check-input" type="radio" name="gridRadios2" id="gridRadios1" value="option1" checked>
           <label class="form1-check-label" for="gridRadios1">
-          "London" is better to you than "Rome", but "Rome" is better over "London" to the other player.                          
+          "London" is better for you than "Rome", but "Rome" is better than "London" for the other player.                          
           </label>
         </div>
         <div class="form1-check">
           <input class="form1-check-input" type="radio" name="gridRadios2" id="gridRadios2" value="option2">
           <label class="form1-check-label" for="gridRadios2">
-             "New York" is better than "Tokyo" for both of the players.
+             "New York" is better than "Tokyo" for both players.
           </label>
         </div>
         <div class="form1-check">
           <input class="form1-check-input" type="radio" name="gridRadios2" id="gridRadios3" value="option3">
           <label class="form1-check-label" for="gridRadios3">
-            The negotiation result "Buenos_Aires" is better than "London" for both of the players.
+            "Buenos_Aires" is better than "London" for both players.
           </label>
         </div>
       </div>
@@ -141,7 +143,7 @@
 	  
 	  <div id="offering_buttons" class="row">
       <div  class="col text-center"> 
-            <button type="button" id="send" class="btn btn-success">Check me Answers and let's Go.</button> 
+            <button type="button" id="send" class="btn btn-success">Check my answers.</button> 
 	  </div>
    <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -170,7 +172,7 @@ $( document ).ready(function(){
 			location.href = "./GameSelector.html";
 		}
 		else{
-		alert("Pleasee go back and read the instructions")
+		alert("Please, go back and read the instructions")
 		}
     });
 })

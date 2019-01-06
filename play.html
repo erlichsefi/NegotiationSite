@@ -125,12 +125,12 @@
   // TODO: Replace with your project's customized code snippet
   var config = {
 
-apiKey: "AIzaSyAdARYSUjBcx8-z-y2ob33LdgVNcrCY5l8",
-    authDomain: "negotiation-c7724.firebaseapp.com",
-    databaseURL: "https://negotiation-c7724.firebaseio.com",
-    projectId: "negotiation-c7724",
-    storageBucket: "negotiation-c7724.appspot.com",
-    messagingSenderId: "757098458430"
+apiKey: "your key",
+    authDomain: "project.firebaseapp.com",
+    databaseURL: "projecDB",
+    projectId: "ID",
+    storageBucket: "storage",
+    messagingSenderId: "id"
   };
   firebase.initializeApp(config);
 </script>
@@ -191,17 +191,49 @@ apiKey: "AIzaSyAdARYSUjBcx8-z-y2ob33LdgVNcrCY5l8",
 				to_offer=WhattoOffer(offers,offerig,resoning);
 				pushOffer(to_offer);
 			}
-		});
+			}).then(()=>{
+			leadsRef =firebase.database().ref('Games_records/games'+game_id);	
+			leadsRef.once('value',function(snapshot) {
+			//if (snapshot.hasChild("offers")){
+			
+			//	var temp_table=""
+			//	snapshot.child("offers").forEach(function(child) {
+			//		console.log(action);
+			//		action =child.child("offer").val();
+			//		if (temp_table=='reject'){
+					
+					
+					
+			//		}
+			//		else if (temp_table=='accept'){
+			//		
+			//		}
+			//		else{
+					
+			//		}
+					
+			//	});
+			
+			}).then(()=>{
 			
 			
-		leadsRef =firebase.database().ref('Games_records/games'+game_id).child("offers").orderByKey().limitToLast(1);
-		leadsRef.on('value',function(snapshot) {
-			
-			snapshot.forEach(function(child) {
-				debugger;
-				action =child.child("offer").val();
-				console.log(action);
+					leadsRef =firebase.database().ref('Games_records/games'+game_id).child("offers").orderByKey().limitToLast(1);
+					leadsRef.on('value',function(snapshot) {
+						
+						snapshot.forEach(function(child) {
+							debugger;
+							action =child.child("offer").val();
+							console.log(action);
+							act(action)
+						});
+
+					});
 			});
+			
+		})
+		
+		
+		function act(action){
 			if (action!=last){
 			last=action
 			
@@ -288,8 +320,9 @@ apiKey: "AIzaSyAdARYSUjBcx8-z-y2ob33LdgVNcrCY5l8",
 			}
 			}
 		}
-		});
 		
+		
+		}
 			function intersection(s_order,s2){
 				return s_order.filter(value => -1 !== s2.indexOf(value));
 			
