@@ -1,0 +1,16 @@
+{
+    "name": "HTML CSS DevContainer",
+    "dockerFile": "Dockerfile",
+    "customizations": {
+      "vscode": {
+        "extensions": [
+      "ms-vscode-remote.remote-containers"
+    ],
+    "settings":{
+      "terminal.integrated.defaultProfile.linux": "bash"
+    }
+   }
+  },
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
+  }
+  
