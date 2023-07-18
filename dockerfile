@@ -10,4 +10,4 @@ EXPOSE 3000
 COPY . .
 
 # Start a simple web server
-CMD npx http-server -p 3000
+CMD npx http-server -p 3000 -proxy /Enter.html
